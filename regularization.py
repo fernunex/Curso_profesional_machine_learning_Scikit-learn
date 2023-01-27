@@ -8,6 +8,7 @@ from sklearn.linear_model import LinearRegression
 # Regularizators
 from sklearn.linear_model import Lasso
 from sklearn.linear_model import Ridge
+from sklearn.linear_model import ElasticNet
 
 # Data preprocessing
 from sklearn.model_selection import train_test_split
@@ -33,12 +34,16 @@ if __name__ == "__main__":
     y_predict_linear = modelLinear.predict(X_test)
 
     # Model + Lasso L1 training
-    modelLasso = Lasso(alpha=0.2).fit(X_train, y_train)
+    modelLasso = Lasso(alpha=0.02).fit(X_train, y_train)
     y_predict_lasso = modelLasso.predict(X_test)
 
     # Model + Ridge L2 training
     modelRidge = Ridge(alpha=1).fit(X_train, y_train)
     y_predict_ridge = modelRidge.predict(X_test)
+
+    # Model + Elasticnet Training
+    modelElastic = ElasticNet(random_state=42, alpha=0.1 ,l1_ratio=0.001).fit(X_train, y_train)
+    y_predict_elastic = modelElastic.predict(X_test)
 
     # Metrics
     linear_loss = mean_squared_error(y_test, y_predict_linear)
@@ -48,7 +53,10 @@ if __name__ == "__main__":
     print("Lasso Loss R^2: ",lasso_loss)
 
     ridge_loss = mean_squared_error(y_test, y_predict_ridge)
-    print("Ridge Loss R^2: ",ridge_loss)
+    print("Ridge Loss R^2: ", ridge_loss)
+
+    elastic_loss = mean_squared_error(y_test, y_predict_elastic)
+    print("Elastic Net Loss R^2: ", elastic_loss)
 
     print("*"*40)
 
@@ -59,4 +67,6 @@ if __name__ == "__main__":
     print(modelLasso.coef_)
     print("Coef Ridge")
     print(modelRidge.coef_)
+    print("Coef Elastic Net")
+    print(modelElastic.coef_)
 
